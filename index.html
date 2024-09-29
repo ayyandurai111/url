@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple URL Opener</title>
+    <!-- Import Google Font: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Apply global font and background styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #8e2de2, #4a00e0);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header styling */
+        header {
+            background-color: #4a00e0;
+            color: #ffffff;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            width: 500px;
+            max-width: 90%;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        /* Style textarea for better alignment */
+        textarea {
+            width: calc(100% - 30px); /* Adjusted to fit well within the container */
+            height: 180px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s ease;
+            resize: none;
+            margin: 0 auto;
+        }
+
+        textarea:focus {
+            border-color: #4a00e0;
+            box-shadow: 0 0 8px rgba(74, 0, 224, 0.2);
+        }
+
+        button {
+            background: #4a00e0;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            padding: 15px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 600;
+            width: 100%;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #6a00ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        URL Opener Tool
+    </header>
+
+    <div class="container">
+        <h1>Open Multiple URLs</h1>
+        <p>Enter URLs, one per line or separated by commas or spaces, and click to open all.</p>
+        <textarea id="urls" placeholder="e.g. https://example1.com, https://example2.com"></textarea>
+        <button id="openUrls">Open URLs</button>
+    </div>
+
+    <script>
+        document.getElementById('openUrls').addEventListener('click', function() {
+            // Get the URLs from the textarea and split based on commas, spaces, or line breaks
+            let urls = document.getElementById('urls').value.split(/[\s,]+/);
+
+            // Filter and format the URLs
+            urls = urls.map(url => {
+                let trimmedUrl = url.trim();
+                if (trimmedUrl && !trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+                    return 'http://' + trimmedUrl; // Add HTTP if missing
+                }
+                return trimmedUrl;
+            }).filter(url => url); // Remove empty entries
+
+            // Open URLs sequentially with a delay to minimize popup blocking
+            let index = 0;
+            function openNextUrl() {
+                if (index < urls.length) {
+                    window.open(urls[index], '_blank');
+                    index++;
+                    setTimeout(openNextUrl, 300); // Adjust the delay as needed
+                }
+            }
+
+            // Start opening the URLs
+            if (urls.length > 0) {
+                openNextUrl();
+            }
+        });
+    </script>
+</body>
+</html>
